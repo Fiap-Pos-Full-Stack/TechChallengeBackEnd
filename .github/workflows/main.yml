@@ -17,6 +17,8 @@ jobs:
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
       POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
     services:
       postgres:
@@ -32,25 +34,28 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         
-      - name: Build and Push Docker Image
-        run: |
-          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker build -t $DOCKER_USERNAME/techpost:latest --build-arg POSTGRES_URI=${{ secrets.DATABASE_URL }} --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} .
-          docker push $DOCKER_USERNAME/techpost:latest
-
       - name: Install dependencies
         run: npm install --save-dev jest ts-jest typescript @types/jest
 
+      - name: Wait for PostgreSQL to be ready
+        run: sleep 30s  # Adiciona um atraso de 30 segundos para garantir que o PostgreSQL esteja pronto
+
       - name: Run migrations
         run: npm run typeorm -- -d ./src/database/data-source.ts migration:run
+
+      - name: Build and Push Docker Image
+        run: |
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker build -t $DOCKER_USERNAME/techpost:latest --build-arg POSTGRES_URI=$DATABASE_URL --build-arg JWT_SECRET=$JWT_SECRET .
+          docker push $DOCKER_USERNAME/techpost:latest
 
       - name: Verify Jest installation
         run: npx jest --version
 
       - name: Run tests
-
         run: npm test
