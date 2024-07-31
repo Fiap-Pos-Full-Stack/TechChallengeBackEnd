@@ -36,7 +36,7 @@
    },
    "scripts": {
       "build": "tsc",
-      "dev": " npm run typeorm -- -d ./src/database/data-source.ts migration:run && nodemon --watch src --exec 'ts-node' src/server.ts",
+      "dev": "npm install && npm run typeorm -- -d ./src/database/data-source.ts migration:run && nodemon --watch src --exec 'ts-node' src/server.ts",
       "start": "node build/server",
       "test": "jest --coverage",
       "test:watch": "jest --watch",
