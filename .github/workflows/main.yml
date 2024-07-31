@@ -36,7 +36,11 @@ jobs:
         run: npm install --save-dev jest ts-jest typescript @types/jest
 
       - name: Wait for PostgreSQL to be ready
-        run: sleep 30s  # Adiciona um atraso de 30 segundos para garantir que o PostgreSQL esteja pronto
+        run: |
+          echo "Waiting for PostgreSQL to be ready..."
+          until pg_isready -h localhost -p 5432; do
+            sleep 2
+          done
 
       - name: Run migrations
         run: npm run typeorm -- -d ./src/database/data-source.ts migration:run
@@ -51,6 +55,7 @@ jobs:
         run: npx jest --version
 
       - name: Run tests
+        env:
           POSTGRES_DB: postgres
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
