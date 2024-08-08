@@ -42,8 +42,10 @@ jobs:
             sleep 2
           done
 
-      - name: Run migrations
+      - name: Set varibles
         run: echo "POSTGRES_HOST=localhost" >> $GITHUB_ENV
+
+      - name: Run migrations
         run: npm run typeorm -- -d ./src/database/data-source.ts migration:run
 
       - name: Build and Push Docker Image
