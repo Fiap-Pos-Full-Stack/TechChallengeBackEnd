@@ -112,7 +112,7 @@ export class PostController {
       const isDeleted = await this.repository.deletePost(parseInt(id));
       if(isDeleted)
       {
-        return res.json({ message: 'Post successfully removed' });
+        return res.status(204).json({ message: 'Post successfully removed' });
       }
       return res.status(404).json({ message: 'Post not found' })
       
