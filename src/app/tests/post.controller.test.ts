@@ -151,7 +151,7 @@ describe('PostController', () => {
           })
 
       const response = await supertest(app).delete(`/posts/${newPost.id}`).set('Authorization', 'Bearer ' + token);
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(204);
       const deletedPost = await repository.getPostById(newPost.id || 1);
       expect(deletedPost).toBeNull();
     });
