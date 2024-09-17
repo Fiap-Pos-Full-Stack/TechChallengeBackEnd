@@ -1,23 +1,23 @@
 import { Request, Response } from 'express';
-import { UserRepository } from '../repositories/user.repository';
+import { TeacherRepository } from '../repositories/teacher.repository';
 import * as jwt from 'jsonwebtoken';
 
 
-export class UserController {
+export class TeacherController {
 
-  private repository: UserRepository;
+  private repository:  TeacherRepository;
 
-  constructor(repository: UserRepository) {
+  constructor(repository:  TeacherRepository) {
     this.repository = repository;
   }
   login = async(req: Request, res: Response) => {
      // #swagger.description = 'Autenticar usuario'
     try {
       const { username,password } = req.body
-      const user = await this.repository.findUsernameByNameAndPassword(username,password)
-      if(user)
+      const teacher = await this.repository.findUsernameByNameAndPassword(username,password)
+      if(teacher)
       {
-        const token = jwt.sign({ _id: user?.id, username: user?.username },process.env.JWT_KEY as string,{ expiresIn: "1d",});
+        const token = jwt.sign({ _id: teacher?.id, username: teacher?.username },process.env.JWT_KEY as string,{ expiresIn: "1d",});
         return res.json({"token":token});
       }
       return res.status(404).json({ message: '' })

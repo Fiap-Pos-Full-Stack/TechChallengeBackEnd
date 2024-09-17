@@ -1,9 +1,9 @@
-import { Entity, Column, ObjectId, PrimaryGeneratedColumn, ObjectIdColumn, BeforeInsert, OneToMany } from 'typeorm';
+import { Entity, Column, ObjectId, PrimaryGeneratedColumn, ObjectIdColumn, BeforeInsert, OneToMany, CreateDateColumn } from 'typeorm';
 import Post from './post.entity';
 
 
-@Entity('user')
-export class User {
+@Entity('teacher')
+export class Teacher {
     @PrimaryGeneratedColumn('increment')
     id: number;
     
@@ -13,9 +13,9 @@ export class User {
     @Column('varchar', { length: 2000, nullable: false })
     password: string;
 
-    @OneToMany(() => Post, (post) => post.user)
+    @OneToMany(() => Post, (post) => post.teacher)
     posts: Post[]
 
 }
 
-export default User;
+export default Teacher;

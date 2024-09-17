@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
-import IUser from "../interfaces/IUser";
+import IUser from "../interfaces/ITeacher";
 
 export interface CustomRequest extends Request {
     username?: string

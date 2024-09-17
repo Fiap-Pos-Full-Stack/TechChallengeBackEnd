@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
 
-export class CreatePostTable1721928477312 implements MigrationInterface {
+export class CreateCommentTable1821928477312 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: 'post',
+                name: 'comment',
                 columns: [
                     {
                         name: 'id',
@@ -14,15 +14,15 @@ export class CreatePostTable1721928477312 implements MigrationInterface {
                         generationStrategy: 'increment'
                     },
                     {
-                        name: 'title',
+                        name: 'name',
                         type: 'varchar',
                         length: '100',
                         isNullable: false
                     },
                     {
-                        name: 'description',
+                        name: 'comentary',
                         type: 'varchar',
-                        length: '2000',
+                        length: '5000',
                         isNullable: false
                     },
                     {
@@ -31,13 +31,7 @@ export class CreatePostTable1721928477312 implements MigrationInterface {
                         isNullable: false
                     },
                     {
-                        name: 'author',
-                        type: 'varchar',
-                        length: '100',
-                        isNullable: false
-                    },
-                    {
-                        name: 'teacherId',
+                        name: 'postId',
                         type: 'serial',
                         isNullable: false
                     }
@@ -45,18 +39,18 @@ export class CreatePostTable1721928477312 implements MigrationInterface {
             })
         )
         await queryRunner.createForeignKey(
-            'post',
+            'comment',
             new TableForeignKey({
-              columnNames: ['teacherId'],
+              columnNames: ['postId'],
               referencedColumnNames: ['id'],
-              referencedTableName: 'teacher',
+              referencedTableName: 'post',
               onDelete:'CASCADE'
             })
           );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('post')
+        await queryRunner.dropTable('comment')
     }
 
 }

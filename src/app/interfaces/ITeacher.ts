@@ -1,7 +1,7 @@
-interface IUser {
+interface ITeacher {
     id: number;
     username?: string;
     password?: string;
 }
 
-export default IUser;
+export default ITeacher;

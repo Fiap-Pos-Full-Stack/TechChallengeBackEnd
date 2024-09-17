@@ -1,6 +1,6 @@
 
 import { PostRepository } from '../repositories/post.repository';
-import { UserRepository } from '../repositories/user.repository';
+import { TeacherRepository } from '../repositories/teacher.repository';
 import supertest from 'supertest';
 import app from '../../app';
 import { title } from 'process';
@@ -8,8 +8,8 @@ import { AppDataSource } from '../../database/data-source';
 let token = ""
 beforeAll(async () => {
   await AppDataSource.initialize();
-  const userRepository = new UserRepository()
-  userRepository.insertNewUser("userTeste", "passTeste")
+  const teacherRepository = new TeacherRepository()
+  teacherRepository.insertNewUser("userTeste", "passTeste")
   const res = await supertest(app).post(`/login`).send({username: "userTeste", passworld:"passTeste"});
   token = res.body.token
 });

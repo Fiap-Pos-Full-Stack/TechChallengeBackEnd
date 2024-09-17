@@ -1,12 +1,12 @@
-import User from "../../app/entities/user.entity";
+import Teacher from "../../app/entities/teacher.entity";
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class CreateUser1720664501470 implements MigrationInterface {
+export class CreateTeacher1720664501470 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: 'user',
+                name: 'teacher',
                 columns: [
                     {
                         name: 'id',
@@ -32,7 +32,7 @@ export class CreateUser1720664501470 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('user')
+        await queryRunner.dropTable('teacher')
     }
 
 }

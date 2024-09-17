@@ -1,46 +1,55 @@
+import { Teacher } from './../entities/teacher.entity';
 import Post from "../entities/post.entity";
 import IPost from "../interfaces/IPost";
 import { AppDataSource } from "../../database/data-source";
-import { Like } from "typeorm";
+import { ILike } from "typeorm";
 
 export class PostRepository {
     private repository = AppDataSource.getRepository(Post);
 
     getPosts = (): Promise<IPost[]> => {
         return this.repository.find({
-            relations: { user: true, },
-            select: { user: { username: true, id: true } }
+            relations: { teacher: true, },
+            select: { teacher: { username: true, id: true } },
+            order: {created: "DESC"}
         });
     }
     getPostById = (id: number): Promise<IPost | null> => {
         return this.repository.findOne({
             where: { id },
-            relations: { user: true, },
-            select: { user: { username: true, id: true } }
+            relations: { teacher: true,comments:true },
+            select: { teacher: { username: true, id: true } },
+            order: {comments: {created:"DESC"}}
+            
         });
     };
-    getPostByAdminId = (id: number): Promise<IPost[] | null> => {
+    getPostByTeacherId = (id: number): Promise<IPost[] | null> => {
         return this.repository.find({
-            where: { user: { id } },
-            relations: { user: true, },
-            select: { user: { username: true, id: true } }
+            where: { teacher: { id } },
+            relations: { teacher: true, },
+            select: { teacher: { username: true, id: true } },
+            order: {created: "DESC"}
         });
     };
     createPost = async (post: IPost): Promise<IPost> => {
         const {
             title,
             description,
+            created,
+            author
         } = post
         const newPost = this.repository.create({
             title,
             description,
-            user: { id: post.user.id }
+            author:author,
+            created:created,
+            teacher: { id: post.teacher.id }
         });
         return await this.repository.save(newPost);
     };
-    updatePost = async (id: number, updatedData: Partial<IPost>): Promise<IPost | null> => {
+    updatePost = async (id: number, userId :number,updatedData: Partial<IPost>): Promise<IPost | null> => {
         await this.repository.update(id, updatedData);
-        const updatedPost = await this.repository.findOne({ where: { id } });
+        const updatedPost = await this.repository.findOne({ where: [{ id },{teacher:{id:userId}}] });
         if (updatedPost != null) {
             this.repository.merge(updatedPost, updatedData);
             const res = this.repository.save(updatedPost);
@@ -50,16 +59,22 @@ export class PostRepository {
 
     };
 
-    deletePost = async (id: number): Promise<boolean> => {
+    deletePost = async (id: number,userId :number): Promise<boolean> => {
+        
         const deleteResult = await this.repository.delete(id);
         return deleteResult.affected !== 0;
     };
 
     searchInPosts = (worlds: string): Promise<IPost[]> => {
+        if(!worlds)
+        {
+            return this.getPosts()
+        }
         return this.repository.find({
-            where: [{ title: Like(`%${worlds}%`) }, { description: Like(`%${worlds}%`) }, { user: { username: Like(`%${worlds}%`) } }],
-            relations: { user: true, },
-            select: { user: { username: true, id: true } }
+            where: [{ title: ILike(`%${worlds}%`) }, { description: ILike(`%${worlds}%`) }, { author: ILike(`%${worlds}%`) }],
+            relations: { teacher: true, },
+            select: { teacher: { username: true, id: true } },
+            order: {created: "DESC"}
         });
     }
 

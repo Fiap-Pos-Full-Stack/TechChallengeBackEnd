@@ -5,8 +5,9 @@ import { InsertInitialData1722104440906 } from './migrations/1722104440906-Inser
 
 import Post from "../app/entities/post.entity";
 import * as dotenv from 'dotenv';
-import { CreateUser1720664501470 } from "./migrations/1720664501470-CreateUser";
-import User from "../app/entities/user.entity";
+import { CreateTeacher1720664501470 } from "./migrations/1720664501470-CreateTeacher";
+import {CreateCommentTable1821928477312} from "./migrations/1821928477312-CreateCommentTable"
+import User from "../app/entities/teacher.entity";
 dotenv.config();
 
 
@@ -20,6 +21,6 @@ export const AppDataSource = new DataSource({
     synchronize: false,
     logging: false,
     entities: [__dirname + '/../**/*.entity{.js,.ts}'],
-    migrations: [CreatePostTable1721928477312,CreateUser1720664501470,InsertInitialData1722104440906],
+    migrations: [CreateCommentTable1821928477312,CreatePostTable1721928477312,CreateTeacher1720664501470,InsertInitialData1722104440906],
     subscribers: [],
 })
