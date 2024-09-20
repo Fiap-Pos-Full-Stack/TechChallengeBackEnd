@@ -63,7 +63,7 @@ describe('PostController', () => {
         const newPost = {
             title: 'create',
             description: 'Description of Test Post 1',
-            user: {id:1},
+            author: "fulano",
           }
       const response = (await supertest(app).post(`/posts`).set('Authorization', 'Bearer ' + token).send(newPost))
 
