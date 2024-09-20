@@ -49,7 +49,7 @@ export class PostRepository {
     };
     updatePost = async (id: number, userId :number,updatedData: Partial<IPost>): Promise<IPost | null> => {
         await this.repository.update(id, updatedData);
-        const updatedPost = await this.repository.findOne({ where: [{ id },{teacher:{id:userId}}] });
+        const updatedPost = await this.repository.findOne({ where: { id } });
         if (updatedPost != null) {
             this.repository.merge(updatedPost, updatedData);
             const res = this.repository.save(updatedPost);
