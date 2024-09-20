@@ -27,7 +27,9 @@ describe('PostController', () => {
         const newPost = await repository.createPost({
             title: 'lista de post',
             description: 'Description of Test Post 1',
-            user: {id:1},
+            author:"author",
+            created: new Date(),
+            teacher: {id:1},
           })
       const response = await supertest(app).get('/posts');
       expect(response.status).toBe(200);
@@ -39,7 +41,9 @@ describe('PostController', () => {
       const newPost = await repository.createPost({
         title: 'buscar um post',
         description: 'Description of Test Post 1',
-        user: {id:1},
+        author:"author",
+        created: new Date(),
+        teacher: {id:1},
       })
       const response = await supertest(app).get(`/posts/${newPost.id}`);
       expect(response.status).toBe(200);
@@ -90,7 +94,9 @@ describe('PostController', () => {
         const newPost = await repository.createPost({
             title: 'atualizar um post',
             description: 'Description of Test Post 1',
-            user: {id:1},
+            author:"author",
+            created: new Date(),
+            teacher: {id:1},
           })
       // Dados para atualização
       const updatedData = {
@@ -147,7 +153,9 @@ describe('PostController', () => {
         const newPost = await repository.createPost({
             title: 'post que vai ser deletado',
             description: 'Description of Test Post 1',
-            user: {id:1},
+            author:"author",
+            created: new Date(),
+            teacher: {id:1},
           })
 
       const response = await supertest(app).delete(`/posts/${newPost.id}`).set('Authorization', 'Bearer ' + token);
