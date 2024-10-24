@@ -9,7 +9,7 @@ let token = ""
 beforeAll(async () => {
   await AppDataSource.initialize();
   const teacherRepository = new TeacherRepository()
-  teacherRepository.insertNewUser("userTeste", "passTeste")
+  teacherRepository.createTeacher("userTeste", "passTeste", "")
   const res = await supertest(app).post(`/login`).send({username: "userTeste", passworld:"passTeste"});
   token = res.body.token
 });

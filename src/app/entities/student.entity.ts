@@ -2,23 +2,21 @@ import { Entity, Column, ObjectId, PrimaryGeneratedColumn, ObjectIdColumn, Befor
 import Post from './post.entity';
 
 
-@Entity('teacher')
-export class Teacher {
+@Entity('student')
+export class Student {
     @PrimaryGeneratedColumn('increment')
     id: number;
     
     @Column('varchar', { length: 100, nullable: false })
     username: string;
-
+    
     @Column('varchar', { length: 100, nullable: false })
     name: string;
 
     @Column('varchar', { length: 2000, nullable: false })
     password: string;
 
-    @OneToMany(() => Post, (post) => post.teacher)
-    posts: Post[]
 
 }
 
-export default Teacher;
+export default Student;

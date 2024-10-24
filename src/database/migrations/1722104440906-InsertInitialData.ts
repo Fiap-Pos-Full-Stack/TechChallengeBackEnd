@@ -4,7 +4,7 @@ export class InsertInitialData1722104440906 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(
-            `INSERT INTO "teacher" (username, password) VALUES ('user', 'pass');`
+            `INSERT INTO "teacher" (username, password, name) VALUES ('user', 'pass', 'name');`
         );
     }
 

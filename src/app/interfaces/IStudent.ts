@@ -1,8 +1,8 @@
-interface ITeacher {
+interface IStudent {
     id: number;
     username?: string;
-    name?: string;
     password?: string;
+    name?: string;
 }
 
-export default ITeacher;
+export default IStudent;

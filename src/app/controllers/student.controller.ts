@@ -1,22 +1,22 @@
 import { Request, Response } from 'express';
-import { TeacherRepository } from '../repositories/teacher.repository';
+import { StudentRepository } from '../repositories/student.repository';
 import * as jwt from 'jsonwebtoken';
 import { CustomRequest } from '../middleware/auth';
 
 
-export class TeacherController {
+export class StudentController {
 
-  private repository: TeacherRepository;
+  private repository: StudentRepository;
 
-  constructor(repository: TeacherRepository) {
+  constructor(repository: StudentRepository) {
     this.repository = repository;
   }
 
   readAll = async (_: Request, res: Response) => {
-    // #swagger.description = 'Buscar lista de todos os professor'
+    // #swagger.description = 'Buscar lista de todos os estudantes'
    try {
-     const teachers = await this.repository.getTeachers();
-     return res.json(teachers);
+     const students = await this.repository.getStudents();
+     return res.json(students);
    }
    catch (error) {
      console.error(error)
@@ -24,14 +24,14 @@ export class TeacherController {
    }
  }
  readId = async (req: Request, res: Response) => {
-  // #swagger.description = 'Buscar um professor por um id especifico'
+  // #swagger.description = 'Buscar um estudante por um id especifico'
  try {
    const id = parseInt(req.params.id); 
-   const post = await this.repository.getTeacherById(id);
-   if (!post) {
-     return res.status(404).json({ message: 'Teacher not found' });
+   const student = await this.repository.getStudentById(id);
+   if (!student) {
+     return res.status(404).json({ message: 'student not found' });
    }
-   return res.json(post);
+   return res.json(student);
  } catch (error) {
    console.error(error)
    return res.status(500).json({ message: 'Internal Server Error' });
@@ -61,7 +61,7 @@ export class TeacherController {
   }
 
   create = async (req: CustomRequest, res: Response) => {
-    // #swagger.description = 'Criar um professor'
+    // #swagger.description = 'Criar um estudante'
     const { user, password, name } = req.body
     const teacherId = req._id
     if (!user) { return res.status(400).json({ mensagem: 'The user is mandatory' }) }
@@ -69,8 +69,8 @@ export class TeacherController {
     if (!name) { return res.status(400).json({ mensagem: 'The name is mandatory' }) }
     try {
       if (teacherId) {
-        const newTeacher = await this.repository.createTeacher(user, password,name)
-        return res.status(201).json(newTeacher)
+        const newStudent = await this.repository.createStudent(user, password,name)
+        return res.status(201).json(newStudent)
       }
       return res.status(500).json({ message: 'Invalid teacher' })
 
@@ -91,11 +91,11 @@ export class TeacherController {
     if (!name) { return res.status(400).json({ mensagem: 'The name is mandatory' }) }
     try {
       if (teacherId) {
-        const newTeacher = await this.repository.updateTeacher(parseInt(id), teacherId, { username: user, password: password, name:name })
-        if (newTeacher) {
-          return res.status(200).json(newTeacher)
+        const newStudent= await this.repository.updateStudent(parseInt(id), teacherId, { username: user, password: password, name:name })
+        if (newStudent) {
+          return res.status(200).json(newStudent)
         }
-        return res.status(404).json({ message: 'Teacher not found' })
+        return res.status(404).json({ message: 'Student not found' })
       }
       return res.status(500).json({ message: 'Invalid teacher' })
 
@@ -113,11 +113,11 @@ export class TeacherController {
       if (!teacherId) {
         return res.status(404).json({ message: 'Invalid Teacher' });
       }
-      const isDeleted = await this.repository.deleteTeacher(parseInt(id));
+      const isDeleted = await this.repository.deleteStudent(parseInt(id));
       if (isDeleted) {
-        return res.status(204).json({ message: 'Teacher successfully removed' });
+        return res.status(204).json({ message: 'Student successfully removed' });
       }
-      return res.status(404).json({ message: 'Teacher not found' })
+      return res.status(404).json({ message: 'Student not found' })
 
     }
     catch (error) {

@@ -1,3 +1,4 @@
+import { CreateStudent1920664501470 } from './migrations/1920664501470-CreateStudent';
 import "reflect-metadata"
 import { DataSource } from "typeorm"
 import { CreatePostTable1721928477312 } from './migrations/1721928477312-CreatePostTable';
@@ -21,6 +22,6 @@ export const AppDataSource = new DataSource({
     synchronize: false,
     logging: false,
     entities: [__dirname + '/../**/*.entity{.js,.ts}'],
-    migrations: [CreateCommentTable1821928477312,CreatePostTable1721928477312,CreateTeacher1720664501470,InsertInitialData1722104440906],
+    migrations: [CreateCommentTable1821928477312,CreatePostTable1721928477312,CreateTeacher1720664501470,CreateStudent1920664501470,InsertInitialData1722104440906],
     subscribers: [],
 })
