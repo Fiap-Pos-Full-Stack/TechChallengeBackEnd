@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { StudentRepository } from '../repositories/student.repository';
 import * as jwt from 'jsonwebtoken';
 import { CustomRequest } from '../middleware/auth';
+import { roles } from '../enums/roles';
 
 
 export class StudentController {
@@ -44,7 +45,7 @@ export class StudentController {
       const { username, password } = req.body
       const teacher = await this.repository.findUsernameByNameAndPassword(username, password)
       if (teacher) {
-        const token = jwt.sign({ _id: teacher?.id, username: teacher?.username }, process.env.JWT_KEY as string, { expiresIn: "1d", });
+        const token = jwt.sign({ _id: teacher?.id, username: teacher?.username,role:roles.STUDENT }, process.env.JWT_KEY as string, { expiresIn: "1d", });
         return res.json({ "token": token });
       }
       return res.status(404).json({ message: '' })

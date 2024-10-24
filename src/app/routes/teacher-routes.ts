@@ -2,17 +2,18 @@ import { Router, Request, Response } from 'express';
 import { AppDataSource } from "../../database/data-source";
 import { TeacherController } from '../controllers/teacher.controller';
 import {TeacherRepository } from '../repositories/teacher.repository';
-import { authMiddleware } from '../middleware/auth';
+import { teacherMiddleware,paramMiddleware } from '../middleware/auth';
+import { roles } from '../enums/roles';
 
 const teacherRouter = Router();
 
-teacherRouter.get('/', authMiddleware,new TeacherController(new TeacherRepository()).readAll);
-teacherRouter.get('/:id',authMiddleware,new TeacherController(new TeacherRepository()).readId);
+teacherRouter.get('/', paramMiddleware([roles.TEACHER]),new TeacherController(new TeacherRepository()).readAll);
+teacherRouter.get('/:id',paramMiddleware([roles.TEACHER]),new TeacherController(new TeacherRepository()).readId);
 
-teacherRouter.put('/:id', authMiddleware,new TeacherController(new TeacherRepository()).update);
+teacherRouter.put('/:id', paramMiddleware([roles.TEACHER]),new TeacherController(new TeacherRepository()).update);
 
-teacherRouter.delete('/:id', authMiddleware,new TeacherController(new TeacherRepository()).delete);
+teacherRouter.delete('/:id', paramMiddleware([roles.TEACHER]),new TeacherController(new TeacherRepository()).delete);
 
-teacherRouter.post('/',authMiddleware,new TeacherController(new TeacherRepository()).create);
+teacherRouter.post('/',paramMiddleware([roles.TEACHER]),new TeacherController(new TeacherRepository()).create);
 
 export default teacherRouter;
