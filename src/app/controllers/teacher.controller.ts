@@ -39,28 +39,6 @@ export class TeacherController {
  }
 }
 
-  login = async (req: Request, res: Response) => {
-    // #swagger.description = 'Autenticar usuario'
-    try {
-      const { username, password } = req.body
-      const teacher = await this.repository.findUsernameByNameAndPassword(username, password)
-      if (teacher) {
-        const token = jwt.sign({ _id: teacher?.id, username: teacher?.username, role:roles.TEACHER }, process.env.JWT_KEY as string, { expiresIn: "1d", });
-        return res.json({ "token": token });
-      }
-      return res.status(404).json({ message: '' })
-
-    }
-    catch (error) {
-      console.log(error);
-      return res.status(500).json({ message: 'Authentication error' })
-    }
-  }
-
-  teste = async (req: Request, res: Response) => {
-    res.json({ "ok": "ok" });
-  }
-
   create = async (req: CustomRequest, res: Response) => {
     // #swagger.description = 'Criar um professor'
     const { user, password, name } = req.body
