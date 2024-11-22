@@ -4,11 +4,22 @@ import IPost from "../interfaces/IPost";
 import { AppDataSource } from "../../database/data-source";
 import { ILike } from "typeorm";
 
+const POST_PER_PAGE = 5
 export class PostRepository {
     private repository = AppDataSource.getRepository(Post);
 
-    getPosts = (): Promise<IPost[]> => {
-        return this.repository.find({
+    getPosts = (page:number): (Promise<[IPost[], number]>) => {
+        if(page)
+        {
+            return this.repository.findAndCount({
+                relations: { teacher: true, },
+                select: { teacher: { username: true, id: true } },
+                order: {created: "DESC"},
+                take: POST_PER_PAGE,
+                skip: (page-1) * POST_PER_PAGE,
+            });
+        }
+        return this.repository.findAndCount({
             relations: { teacher: true, },
             select: { teacher: { username: true, id: true } },
             order: {created: "DESC"}
@@ -65,12 +76,12 @@ export class PostRepository {
         return deleteResult.affected !== 0;
     };
 
-    searchInPosts = (worlds: string): Promise<IPost[]> => {
+    searchInPosts = (worlds: string): Promise<[IPost[], number]> => {
         if(!worlds)
         {
-            return this.getPosts()
+            return this.getPosts(0)
         }
-        return this.repository.find({
+        return this.repository.findAndCount({
             where: [{ title: ILike(`%${worlds}%`) }, { description: ILike(`%${worlds}%`) }, { author: ILike(`%${worlds}%`) }],
             relations: { teacher: true, },
             select: { teacher: { username: true, id: true } },

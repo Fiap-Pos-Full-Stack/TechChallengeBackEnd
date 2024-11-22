@@ -8,6 +8,7 @@ export interface CustomRequest extends Request {
     _id?: number
     role?: number
     token?: string
+    page?:number
   }
 
   interface DecodedToken {

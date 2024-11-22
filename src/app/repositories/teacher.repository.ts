@@ -2,18 +2,27 @@ import Teacher from "../entities/teacher.entity";
 import ITeacher from "../interfaces/ITeacher";
 import { AppDataSource } from "../../database/data-source";
 
+const TEACHER_PER_PAGE = 5
 export class TeacherRepository {
     private repository = AppDataSource.getRepository(Teacher);
     findUsernameByNameAndPassword = (username: string, password:string): Promise<ITeacher | null> => {
        return this.repository.findOne({ where: { username:username, password:password } });
     }
-    getTeachers = (): Promise<ITeacher[]> => {
-        return this.repository.find();
+    getTeachers = (page:number): (Promise<[ITeacher[],number]>) => {
+        if(!page){
+            page =1
+        }
+        return this.repository.findAndCount({
+            take: TEACHER_PER_PAGE,
+            skip: (page-1) * TEACHER_PER_PAGE,
+            order:{ id:'ASC'},
+            select: { username:true, id:true,name:true},
+        })
     }
     getTeacherById = (id: number): Promise<ITeacher | null> => {
         return this.repository.findOne({
             where: { id },
-            select: { username:true},
+
         });
     };
 

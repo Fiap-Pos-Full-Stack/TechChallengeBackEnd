@@ -3,6 +3,7 @@ import { TeacherRepository } from '../repositories/teacher.repository';
 import * as jwt from 'jsonwebtoken';
 import { CustomRequest } from '../middleware/auth';
 import { roles } from '../enums/roles';
+import { PaginationRequest } from '../interfaces/IPagionationRequest';
 
 
 export class TeacherController {
@@ -13,10 +14,12 @@ export class TeacherController {
     this.repository = repository;
   }
 
-  readAll = async (_: Request, res: Response) => {
+  readAll = async (req: CustomRequest, res: Response) => {
     // #swagger.description = 'Buscar lista de todos os professor'
+    let page = String(req.query.page)
    try {
-     const teachers = await this.repository.getTeachers();
+     const [teachers,total] = await this.repository.getTeachers(parseInt(page));
+     res.set("X-Total-Count", String(total));
      return res.json(teachers);
    }
    catch (error) {

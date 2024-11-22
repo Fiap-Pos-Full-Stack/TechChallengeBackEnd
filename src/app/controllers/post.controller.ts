@@ -12,10 +12,12 @@ export class PostController {
     this.repository = repository;
     this.commentRepository = commentRepository
   }
-  read = async (_: Request, res: Response) => {
+  read = async (req: Request, res: Response) => {
      // #swagger.description = 'Buscar lista de todos os posts'
+     let page = String(req.query.page)
     try {
-      const posts = await this.repository.getPosts();
+      const [posts, total] = await this.repository.getPosts(parseInt(page));
+      res.set("X-Total-Count", String(total));
       return res.json(posts);
     }
     catch (error) {
@@ -166,7 +168,8 @@ export class PostController {
         const posts = await this.repository.searchInPosts(keyword)
         return res.json(posts);
       }
-      const posts = await this.repository.getPosts()
+      const [posts, total] = await this.repository.getPosts(0)
+      res.set("X-Total-Count", String(total));
       return res.json(posts);
 
     } catch (error) {

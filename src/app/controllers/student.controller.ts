@@ -13,10 +13,12 @@ export class StudentController {
     this.repository = repository;
   }
 
-  readAll = async (_: Request, res: Response) => {
+  readAll = async (req: CustomRequest, res: Response) => {
     // #swagger.description = 'Buscar lista de todos os estudantes'
+    let page = String(req.query.page)
    try {
-     const students = await this.repository.getStudents();
+    const [students,total] = await this.repository.getStudents(parseInt(page));
+    res.set("X-Total-Count", String(total));
      return res.json(students);
    }
    catch (error) {
