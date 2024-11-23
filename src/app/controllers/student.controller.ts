@@ -21,7 +21,7 @@ export class StudentController {
     res.set("Access-Control-Expose-Headers","*")
     res.set("X-Total-Count", String(total));
     res.set("X-Per-Page", String(STUDENT_PER_PAGE));
-    res.set("X-Total-Pages", String(total/STUDENT_PER_PAGE));
+    res.set("X-Total-Pages", String(Math.ceil(total/STUDENT_PER_PAGE)));
      return res.json(students);
    }
    catch (error) {

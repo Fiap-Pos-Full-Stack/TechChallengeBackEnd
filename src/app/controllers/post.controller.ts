@@ -20,7 +20,7 @@ export class PostController {
       res.set("Access-Control-Expose-Headers","*")
       res.set("X-Total-Count", String(total));
       res.set("X-Per-Page", String(POST_PER_PAGE));
-      res.set("X-Total-Pages", String(total/POST_PER_PAGE));
+      res.set("X-Total-Pages", String(Math.ceil(total/POST_PER_PAGE)));
       return res.json(posts);
     }
     catch (error) {
@@ -175,7 +175,7 @@ export class PostController {
       res.set("Access-Control-Expose-Headers","*")
       res.set("X-Total-Count", String(total));
       res.set("X-Per-Page", String(POST_PER_PAGE));
-      res.set("X-Total-Pages", String(total/POST_PER_PAGE));
+      res.set("X-Total-Pages", String(Math.ceil(total/POST_PER_PAGE)));
       return res.json(posts);
 
     } catch (error) {
