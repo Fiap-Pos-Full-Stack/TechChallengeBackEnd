@@ -4,7 +4,7 @@ import IPost from "../interfaces/IPost";
 import { AppDataSource } from "../../database/data-source";
 import { ILike } from "typeorm";
 
-const POST_PER_PAGE = 5
+export const POST_PER_PAGE = 5
 export class PostRepository {
     private repository = AppDataSource.getRepository(Post);
 

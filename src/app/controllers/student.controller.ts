@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { StudentRepository } from '../repositories/student.repository';
+import { STUDENT_PER_PAGE, StudentRepository } from '../repositories/student.repository';
 import * as jwt from 'jsonwebtoken';
 import { CustomRequest } from '../middleware/auth';
 import { roles } from '../enums/roles';
@@ -18,7 +18,10 @@ export class StudentController {
     let page = String(req.query.page)
    try {
     const [students,total] = await this.repository.getStudents(parseInt(page));
+    res.set("Access-Control-Expose-Headers","*")
     res.set("X-Total-Count", String(total));
+    res.set("X-Per-Page", String(STUDENT_PER_PAGE));
+    res.set("X-Total-Pages", String(total/STUDENT_PER_PAGE));
      return res.json(students);
    }
    catch (error) {

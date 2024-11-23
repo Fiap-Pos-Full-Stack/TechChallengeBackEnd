@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { PostRepository } from '../repositories/post.repository';
+import { POST_PER_PAGE, PostRepository } from '../repositories/post.repository';
 import { CustomRequest } from '../middleware/auth';
 import { CommentRepository } from '../repositories/comment.repository';
 
@@ -17,7 +17,10 @@ export class PostController {
      let page = String(req.query.page)
     try {
       const [posts, total] = await this.repository.getPosts(parseInt(page));
+      res.set("Access-Control-Expose-Headers","*")
       res.set("X-Total-Count", String(total));
+      res.set("X-Per-Page", String(POST_PER_PAGE));
+      res.set("X-Total-Pages", String(total/POST_PER_PAGE));
       return res.json(posts);
     }
     catch (error) {
@@ -169,7 +172,10 @@ export class PostController {
         return res.json(posts);
       }
       const [posts, total] = await this.repository.getPosts(0)
+      res.set("Access-Control-Expose-Headers","*")
       res.set("X-Total-Count", String(total));
+      res.set("X-Per-Page", String(POST_PER_PAGE));
+      res.set("X-Total-Pages", String(total/POST_PER_PAGE));
       return res.json(posts);
 
     } catch (error) {

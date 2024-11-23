@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { TeacherRepository } from '../repositories/teacher.repository';
+import { TEACHER_PER_PAGE, TeacherRepository } from '../repositories/teacher.repository';
 import * as jwt from 'jsonwebtoken';
 import { CustomRequest } from '../middleware/auth';
 import { roles } from '../enums/roles';
@@ -19,7 +19,11 @@ export class TeacherController {
     let page = String(req.query.page)
    try {
      const [teachers,total] = await this.repository.getTeachers(parseInt(page));
+     res.set("Access-Control-Expose-Headers","*")
      res.set("X-Total-Count", String(total));
+     res.set("X-Per-Page", String(TEACHER_PER_PAGE));
+     res.set("X-Total-Pages", String(total/TEACHER_PER_PAGE));
+     
      return res.json(teachers);
    }
    catch (error) {

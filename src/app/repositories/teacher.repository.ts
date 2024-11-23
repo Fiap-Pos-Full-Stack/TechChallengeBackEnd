@@ -2,7 +2,7 @@ import Teacher from "../entities/teacher.entity";
 import ITeacher from "../interfaces/ITeacher";
 import { AppDataSource } from "../../database/data-source";
 
-const TEACHER_PER_PAGE = 5
+export const TEACHER_PER_PAGE = 5
 export class TeacherRepository {
     private repository = AppDataSource.getRepository(Teacher);
     findUsernameByNameAndPassword = (username: string, password:string): Promise<ITeacher | null> => {
@@ -15,7 +15,7 @@ export class TeacherRepository {
         return this.repository.findAndCount({
             take: TEACHER_PER_PAGE,
             skip: (page-1) * TEACHER_PER_PAGE,
-            order:{ id:'ASC'},
+            order:{ id:'DESC'},
             select: { username:true, id:true,name:true},
         })
     }
