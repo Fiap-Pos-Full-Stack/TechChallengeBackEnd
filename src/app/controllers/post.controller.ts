@@ -168,7 +168,7 @@ export class PostController {
     try {
       const keyword = req.query.keyword?.toString().toLowerCase()
       if (keyword) {
-        const posts = await this.repository.searchInPosts(keyword)
+        const [posts, total]  = await this.repository.searchInPosts(keyword)
         return res.json(posts);
       }
       const [posts, total] = await this.repository.getPosts(0)
